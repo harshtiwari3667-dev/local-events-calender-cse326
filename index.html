@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f2">
+  <title>Gather — Local events</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">
+      <span class="brand-mark">g</span>
+      gather<span class="dot">.</span>
+    </a>
+
+    <div class="user-area">
+      <span id="welcome">Your neighborhood, together</span>
+      <button class="avatar" id="profileBtn" title="Set your profile">☺</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">YOUR LOCAL GO-TO</p>
+        <h1>
+          Good things are<br>
+          <em>happening nearby.</em>
+        </h1>
+        <p class="hero-copy">
+          Find your people. Make a plan. Enjoy your neighborhood.
+        </p>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <span class="sun">✳</span>
+        <span class="art-note note-one">✦</span>
+        <span class="art-note note-two">✿</span>
+        <div class="art-card">
+          <span>THIS WEEK</span>
+          <strong>
+            Make<br>
+            memories.
+          </strong>
+          <small>RIGHT AROUND THE CORNER →</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="search-wrap">
+        <span>⌕</span>
+        <input
+          id="search"
+          type="search"
+          placeholder="Search events, places, or plans..."
+        >
+      </div>
+
+      <select id="categoryFilter" aria-label="Filter by category">
+        <option value="">All categories</option>
+        <option>Food</option>
+        <option>Music</option>
+        <option>Outdoors</option>
+        <option>Arts</option>
+        <option>Community</option>
+        <option>Other</option>
+      </select>
+
+      <select id="dateFilter" aria-label="Filter by date">
+        <option value="all">Any time</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="today">Today</option>
+        <option value="week">This week</option>
+      </select>
+
+      <button class="filter-fav" id="favFilter">♡ Favorites</button>
+      <button class="primary" id="addBtn">＋ Add event</button>
+    </section>
+
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">THE NEIGHBORHOOD BOARD</p>
+        <h2>
+          Events &amp; plans
+          <span class="count" id="eventCount">0</span>
+        </h2>
+      </div>
+      <button class="text-button" id="placesBtn">⌖ Manage places</button>
+    </div>
+
+    <section class="event-grid" id="eventGrid"></section>
+
+    <section class="empty" id="empty">
+      <div class="empty-icon">✳</div>
+      <h3>No events just yet</h3>
+      <p>Add a local event or plan to get the calendar started.</p>
+      <button class="primary" id="emptyAdd">＋ Add your first event</button>
+    </section>
+
+    <footer>
+      <span>Made for the moments that bring us together.</span>
+      <button id="printBtn">↗ Share / print calendar</button>
+    </footer>
+  </main>
+
+  <dialog id="eventDialog">
+    <form id="eventForm">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">ADD TO THE BOARD</p>
+          <h2 id="formTitle">Create an event</h2>
+        </div>
+        <button type="button" class="close" data-close>×</button>
+      </div>
+
+      <input type="hidden" id="eventId">
+
+      <label>
+        Event or plan name
+        <input
+          id="title"
+          required
+          maxlength="70"
+          placeholder="e.g. Sunday farmers market"
+        >
+      </label>
+
+      <div class="form-row">
+        <label>
+          Date
+          <input type="date" id="date" required>
+        </label>
+        <label>
+          Start time
+          <input type="time" id="time" required>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>
+          Category
+          <select id="category">
+            <option>Community</option>
+            <option>Food</option>
+            <option>Music</option>
+            <option>Outdoors</option>
+            <option>Arts</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>
+          Cost per person (₹)
+          <input
+            type="number"
+            id="cost"
+            min="0"
+            step="0.01"
+            placeholder="Free"
+          >
+        </label>
+      </div>
+
+      <label>
+        Place
+        <select id="place" required></select>
+      </label>
+
+      <label>
+        Itinerary / details
+        <textarea
+          id="details"
+          rows="3"
+          maxlength="300"
+          placeholder="What should people know? Add a few plan details..."
+        ></textarea>
+      </label>
+
+      <div class="form-actions">
+        <button type="button" class="text-button delete-button" id="deleteBtn">
+          Delete event
+        </button>
+        <button type="button" class="secondary" data-close>Cancel</button>
+        <button class="primary" type="submit">Save event</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="placesDialog">
+    <form id="placeForm">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">YOUR NEIGHBORHOOD</p>
+          <h2>Manage places</h2>
+        </div>
+        <button type="button" class="close" data-close>×</button>
+      </div>
+
+      <p class="muted">
+        Save your favorite local spots for quick event planning.
+      </p>
+
+      <div class="inline-form">
+        <input
+          id="placeName"
+          required
+          maxlength="50"
+          placeholder="Add a place, e.g. Robo Park"
+        >
+        <button class="primary">Add</button>
+      </div>
+
+      <ul id="placeList" class="place-list"></ul>
+    </form>
+  </dialog>
+
+  <dialog id="profileDialog">
+    <form id="profileForm">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">A LITTLE INTRO</p>
+          <h2>Your profile</h2>
+        </div>
+        <button type="button" class="close" data-close>×</button>
+      </div>
+
+      <label>
+        Your name
+        <input
+          id="userName"
+          maxlength="35"
+          placeholder="What should we call you?"
+        >
+      </label>
+
+      <div class="form-actions">
+        <button class="secondary" type="button" data-close>Cancel</button>
+        <button class="primary">Save profile</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
